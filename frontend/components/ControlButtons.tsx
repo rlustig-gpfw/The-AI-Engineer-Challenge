@@ -7,13 +7,21 @@ interface ControlButtonsProps {
   setInputMessage: (message: string) => void
   onSend: (message: string) => void
   isLoading: boolean
+  onScrollUp: () => void
+  onScrollDown: () => void
+  onFontSizeDecrease: () => void
+  onFontSizeIncrease: () => void
 }
 
 export default function ControlButtons({ 
   inputMessage, 
   setInputMessage, 
   onSend,
-  isLoading 
+  isLoading,
+  onScrollUp,
+  onScrollDown,
+  onFontSizeDecrease,
+  onFontSizeIncrease
 }: ControlButtonsProps) {
   const [showInput, setShowInput] = useState(false)
 
@@ -39,26 +47,34 @@ export default function ControlButtons({
             
             {/* Direction buttons */}
             <button 
-              className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-8 text-gb-light text-xs flex items-center justify-center button-press"
-              aria-label="Up"
+              onClick={onScrollUp}
+              className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-8 text-gb-light hover:text-gb-lightest text-xs flex items-center justify-center button-press transition-colors"
+              aria-label="Scroll Up"
+              title="Scroll up through messages"
             >
               ▲
             </button>
             <button 
-              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-8 text-gb-light text-xs flex items-center justify-center button-press"
-              aria-label="Down"
+              onClick={onScrollDown}
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-8 text-gb-light hover:text-gb-lightest text-xs flex items-center justify-center button-press transition-colors"
+              aria-label="Scroll Down"
+              title="Scroll down through messages"
             >
               ▼
             </button>
             <button 
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-6 text-gb-light text-xs flex items-center justify-center button-press"
-              aria-label="Left"
+              onClick={onFontSizeDecrease}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-8 text-gb-light hover:text-gb-lightest text-xs flex items-center justify-center button-press transition-colors"
+              aria-label="Decrease Font Size"
+              title="Decrease font size"
             >
               ◄
             </button>
             <button 
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-6 text-gb-light text-xs flex items-center justify-center button-press"
-              aria-label="Right"
+              onClick={onFontSizeIncrease}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 text-gb-light hover:text-gb-lightest text-xs flex items-center justify-center button-press transition-colors"
+              aria-label="Increase Font Size"
+              title="Increase font size"
             >
               ►
             </button>
@@ -77,9 +93,10 @@ export default function ControlButtons({
           <button
             onClick={() => setShowInput(!showInput)}
             disabled={isLoading}
-            className="absolute left-0 top-8 w-12 h-12 rounded-full bg-red-700 hover:bg-red-600 shadow-lg button-press disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-gb-lightest font-bold text-xs"
+            className="absolute left-0 top-2 w-12 h-12 rounded-full shadow-lg button-press disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-white font-bold text-xs"
             style={{
-              boxShadow: '0 4px 0 #7f1d1d, 0 6px 10px rgba(0,0,0,0.3)'
+              background: 'linear-gradient(135deg, #e91e8c 0%, #d81b7f 50%, #c01870 100%)',
+              boxShadow: '0 4px 0 #8b1155, 0 6px 10px rgba(0,0,0,0.3)'
             }}
           >
             B
@@ -89,9 +106,10 @@ export default function ControlButtons({
           <button
             onClick={() => inputMessage.trim() && onSend(inputMessage)}
             disabled={isLoading || !inputMessage.trim()}
-            className="absolute right-0 bottom-0 w-12 h-12 rounded-full bg-red-700 hover:bg-red-600 shadow-lg button-press disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-gb-lightest font-bold text-xs"
+            className="absolute right-0 bottom-2 w-12 h-12 rounded-full shadow-lg button-press disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-white font-bold text-xs"
             style={{
-              boxShadow: '0 4px 0 #7f1d1d, 0 6px 10px rgba(0,0,0,0.3)'
+              background: 'linear-gradient(135deg, #e91e8c 0%, #d81b7f 50%, #c01870 100%)',
+              boxShadow: '0 4px 0 #8b1155, 0 6px 10px rgba(0,0,0,0.3)'
             }}
           >
             A
@@ -106,17 +124,17 @@ export default function ControlButtons({
       {/* Input Section (toggled by B button) */}
       {showInput && (
         <form onSubmit={handleSubmit} className="mb-4">
-          <div className="bg-gb-darkest rounded p-2">
+          <div className="bg-gb-darkest rounded p-2 w-full">
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Type your message..."
-              className="w-full bg-gb-screen text-gb-darkest text-[8px] p-2 rounded border-2 border-gb-dark focus:outline-none focus:border-gb-darkest placeholder-gb-dark/50"
+              className="w-full bg-gb-screen text-gb-darkest text-[10px] p-2 rounded border-2 border-gb-dark focus:outline-none focus:border-gb-darkest placeholder-gb-dark/50 box-border"
               autoFocus
               disabled={isLoading}
             />
-            <div className="text-[6px] text-gb-light mt-1 opacity-70">
+            <div className="text-[7px] text-gb-light mt-1 opacity-70">
               Press A or Enter to send
             </div>
           </div>

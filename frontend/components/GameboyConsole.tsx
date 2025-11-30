@@ -11,6 +11,8 @@ export default function GameboyConsole() {
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showQuickActions, setShowQuickActions] = useState(true)
+  const [fontSize, setFontSize] = useState(10) // Default 10px
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const quickActions = [
     "I'm feeling anxious",
@@ -58,11 +60,39 @@ export default function GameboyConsole() {
     sendMessage(action)
   }
 
+  const handleScrollUp = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        top: -100,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const handleScrollDown = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        top: 100,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const handleFontSizeDecrease = () => {
+    setFontSize(prev => Math.max(8, prev - 1)) // Min 8px
+  }
+
+  const handleFontSizeIncrease = () => {
+    setFontSize(prev => Math.min(14, prev + 1)) // Max 14px
+  }
+
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-xl mx-auto">
       {/* Gameboy Body */}
-      <div className="bg-gb-body rounded-3xl p-6 shadow-2xl relative" style={{
-        boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3)'
+      <div className="bg-gb-body rounded-3xl p-8 shadow-2xl relative overflow-hidden" style={{
+        boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3)',
+        width: '100%',
+        maxWidth: '576px'
       }}>
         {/* Top Section - Brand */}
         <div className="mb-4">
@@ -83,12 +113,14 @@ export default function GameboyConsole() {
           </div>
           
           {/* Screen */}
-          <div className="bg-gb-screen rounded mt-6 p-3 h-96 relative overflow-hidden scanlines crt-effect">
+          <div className="bg-gb-screen rounded mt-6 p-4 h-[450px] relative overflow-hidden scanlines crt-effect">
             <ChatScreen 
               messages={messages} 
               isLoading={isLoading}
               quickActions={showQuickActions ? quickActions : []}
               onQuickAction={handleQuickAction}
+              scrollContainerRef={scrollContainerRef}
+              fontSize={fontSize}
             />
           </div>
         </div>
@@ -99,6 +131,10 @@ export default function GameboyConsole() {
           setInputMessage={setInputMessage}
           onSend={sendMessage}
           isLoading={isLoading}
+          onScrollUp={handleScrollUp}
+          onScrollDown={handleScrollDown}
+          onFontSizeDecrease={handleFontSizeDecrease}
+          onFontSizeIncrease={handleFontSizeIncrease}
         />
 
         {/* Bottom Details */}
