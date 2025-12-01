@@ -31,7 +31,9 @@ export default function GameboyConsole() {
     setShowQuickActions(false)
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat', {
+      // Use relative URL that works both locally (with proxy) and in production
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/chat'
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
